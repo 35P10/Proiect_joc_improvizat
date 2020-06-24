@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1592065785 source:d:\pro-github\proiect_joc_improvizat\game\main.cpp
+	<allegro.h>
+	<iostream>
+
+1593027985 source:j:\descargas\proiect_joc_improvizat-master\game\main.cpp
+	<allegro.h>
+	<iostream>
+
+1593027985 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\main.cpp
+	<allegro.h>
+	<iostream>
+
