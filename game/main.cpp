@@ -173,7 +173,7 @@ class Juego
     BITMAP *bomba_bmp;
     BITMAP *muro_destructible;
 
-    int unit = 30;          // tamaño de cada unidad de imagen en el mapa  (en pixeles)
+    int unit = 30;          // tamaÃ±o de cada unidad de imagen en el mapa  (en pixeles)
     int cantMapas;   // cantidad de niveles
     Mapa *arrayMapas;       // array con punteros a cada objeto Mapa (niveles)
     int cantJugadores;
@@ -203,7 +203,7 @@ Juego::Juego()
     muro_destructible  = load_bitmap("muro_destructuble.bmp", NULL);
     bomba_bmp  = load_bitmap("bomba.bmp", NULL);
 
-    cantMapas  = 2; // serán más
+    cantMapas  = 2; // serÃ¡n mÃ¡s
     arrayMapas = new Mapa[cantMapas];
     crearArrayMapas();
     cantJugadores  = 2; //
@@ -237,8 +237,8 @@ void Juego::crearArrayMapas()
     "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
     "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    };                              // "mapa_00" es el diseño del mapa hecho con chars
-    Mapa oMapa_00(mapa_00);         // se crea "oMapa_00" que es un objeto de la clase Mapa, basado en el diseño de "mapa_00"
+    };                              // "mapa_00" es el diseÃ±o del mapa hecho con chars
+    Mapa oMapa_00(mapa_00);         // se crea "oMapa_00" que es un objeto de la clase Mapa, basado en el diseÃ±o de "mapa_00"
     arrayMapas[0] = oMapa_00;       // se inserta el objeto "oMapa_00" en la primera posicion del array de mapas del juego
 
     char mapa_01[MFIL][MCOL] = { // NIVEL 1
@@ -267,7 +267,7 @@ void Juego::crearArrayMapas()
 void Juego::crearArrayJugadores()
 {
         Punto oPunto1(30,30);
-        Jugador oPlayer1(oPunto1);      //aqui llenar más jugadores
+        Jugador oPlayer1(oPunto1);      //aqui llenar mÃ¡s jugadores
         arrayJugadores[0] = oPlayer1;
 
         Punto oPunto2((MCOL-3)*30,(MFIL-2)*30);
@@ -394,7 +394,6 @@ void menu()
 
     if (mouse_x>140&&mouse_x<340&&mouse_y>282&&mouse_y<311)
     {
-        play_sample(soundselect,250,150,1000,0);
       blit(aventura,buffer,0,0,0,0,960,540);
       if (mouse_b & 1)
       {
@@ -445,6 +444,7 @@ void menu()
     }
     else
     {
+      play_sample(soundselect,250,150,1000,0);
       blit(idle,buffer,0,0,0,0,960,540);
     }
     masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,50,75);
