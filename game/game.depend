@@ -7,13 +7,13 @@
 	<allegro.h>
 	<iostream>
 
-1593586525 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\main.cpp
+1593710751 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\main.cpp
 	<allegro.h>
 	"Punto.h"
 	"Bomba.h"
 	<iostream>
 
-1593584481 j:\documentos\2do\cc2\proiect_joc_improvizat\game\include\bomba.h
+1593710734 j:\documentos\2do\cc2\proiect_joc_improvizat\game\include\bomba.h
 	"Punto.h"
 	<iostream>
 
@@ -40,4 +40,20 @@
 	<iostream>
 
 1593574530 source:c:\users\lucca\desktop\game\src\mapa.cpp
+
+1593738627 source:c:\users\hp\downloads\game\main.cpp
+	<allegro.h>
+	"Punto.h"
+	"Bomba.h"
+	<iostream>
+
+1593572755 c:\users\hp\downloads\game\include\punto.h
+
+1593710734 c:\users\hp\downloads\game\include\bomba.h
+	"Punto.h"
+	<iostream>
+
+1593318237 source:c:\users\hp\downloads\game\src\punto.cpp
+	<iostream>
+	"Punto.h"
 

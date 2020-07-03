@@ -7,19 +7,19 @@
 			<Cursor1 position="232" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\Punto.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\Bomba.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="945" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="include\Punto.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="76" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+	<File name="main.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="13585" topLine="433" />
-		</Cursor>
-	</File>
-	<File name="include\Bomba.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="754" topLine="39" />
+			<Cursor1 position="8346" topLine="255" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

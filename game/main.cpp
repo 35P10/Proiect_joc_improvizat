@@ -1,5 +1,5 @@
 #include <allegro.h>
-#define MFIL 19  // filas del mapa
+#define MFIL 20  // filas del mapa
 #define MCOL 33  // columnas del mapa, en realidad seran 20(o sea -1) descontando el caracter final '\0' (//solo puede ser impar?)
 #include "Punto.h"
 #include "Bomba.h"
@@ -104,6 +104,7 @@ void Jugador::movimiento(int nivel, Mapa *arrayMapas,Bomba *bombas,int max_bomba
     int y2=Y+1;
     int x1=X-1;
     int x2=X+1;
+
     if(arrayMapas[nivel].getPtrMapa()[y1][X] == 'k' && key[KEY_W] && y1>-1 && IsThereABomb(bombas,max_bombas,X*30,y1*30)==0)
         coordenada->offset(0,-30);
     if(arrayMapas[nivel].getPtrMapa()[y2][X] == 'k' && key[KEY_S]&& y2<18 && IsThereABomb(bombas,max_bombas,X*30,y2*30)==0)
@@ -116,7 +117,7 @@ void Jugador::movimiento(int nivel, Mapa *arrayMapas,Bomba *bombas,int max_bomba
             crearBomba(bombas,coordenada,n_bomba,max_bombas);
             if (n_bomba==5)
                 n_bomba=0;
-        }
+    }
 
 
 }
@@ -173,7 +174,7 @@ class Juego
     BITMAP *bomba_bmp;
     BITMAP *muro_destructible;
 
-    int unit = 30;          // tamaÃ±o de cada unidad de imagen en el mapa  (en pixeles)
+    int unit = 30;          // tamaño de cada unidad de imagen en el mapa  (en pixeles)
     int cantMapas;   // cantidad de niveles
     Mapa *arrayMapas;       // array con punteros a cada objeto Mapa (niveles)
     int cantJugadores;
@@ -203,7 +204,7 @@ Juego::Juego()
     muro_destructible  = load_bitmap("muro_destructuble.bmp", NULL);
     bomba_bmp  = load_bitmap("bomba.bmp", NULL);
 
-    cantMapas  = 2; // serÃ¡n mÃ¡s
+    cantMapas  = 2; // serán más
     arrayMapas = new Mapa[cantMapas];
     crearArrayMapas();
     cantJugadores  = 2; //
@@ -220,25 +221,26 @@ void Juego::crearArrayMapas()
 {
     char mapa_00[MFIL][MCOL] = { // NIVEL 0
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", //alto =17, ancho=20
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkykkkkkkxkkkkxkkkkkykkkkkkx",
-    "xkkkkkykkkkykxkkkkxkykkkykkkkkkx",
-    "xkkkkkkkkkkykkkkkkkkykkkkkkkkkkx",
-    "xkkkkkkkkkkykkkkkkkkykkkkkkkkkkx",
-    "xkkkkkkkkkkkkxkkkkxkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkxkkkkxkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkyyyyyykkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
-    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xyyyyyyyyyyyyxyyyxyyyxyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxyxyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxyxyyyyyyyyyx",
+    "xyxyxxyxyxxxyxyxyxyxyyyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxxxyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxxxyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxxxyxyxyxyxxxxxxxxxxxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxyxxyxyxyxyxyxyxyxyxxxxxxxxxxx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxxxyxyxyxyxxxxxxxxxxxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxyxxxxxxxxxxx",
+    "xyyyyyyxyyyyyxyxyxyxyyyxyyyxyyyx",
+    "xkxyxxyxyxxxyxyxyxyxyxyxyxyxyxyx",//
+    "xkkyyyyxyyyyyyyxyyyxyxyyyxyyyxyx",//xyyyyyyxyyyyyyyxyyyxyxyyyxyyyxyx
     "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    };                              // "mapa_00" es el diseÃ±o del mapa hecho con chars
-    Mapa oMapa_00(mapa_00);         // se crea "oMapa_00" que es un objeto de la clase Mapa, basado en el diseÃ±o de "mapa_00"
+    };                              // "mapa_00" es el diseño del mapa hecho con chars
+    Mapa oMapa_00(mapa_00);         // se crea "oMapa_00" que es un objeto de la clase Mapa, basado en el diseño de "mapa_00"
     arrayMapas[0] = oMapa_00;       // se inserta el objeto "oMapa_00" en la primera posicion del array de mapas del juego
 
     char mapa_01[MFIL][MCOL] = { // NIVEL 1
@@ -266,8 +268,8 @@ void Juego::crearArrayMapas()
 
 void Juego::crearArrayJugadores()
 {
-        Punto oPunto1(30,30);
-        Jugador oPlayer1(oPunto1);      //aqui llenar mÃ¡s jugadores
+        Punto oPunto1(30,510);
+        Jugador oPlayer1(oPunto1);      //aqui llenar más jugadores
         arrayJugadores[0] = oPlayer1;
 
         Punto oPunto2((MCOL-3)*30,(MFIL-2)*30);
@@ -286,11 +288,12 @@ void Juego::ejecutar() // inicia la ejecucion del juego
     {
         arrayJugadores[0].movimiento(0,arrayMapas,bombas,max_bombas,n_bomba);
 
+
         if (key[KEY_ESC]) {
             status = pause();
 
         }
-        explosionDeBomba(bombas,max_bombas,50,arrayMapas);
+        explosionDeBomba(bombas,max_bombas,30,arrayMapas);
         clear(buffer);
         dibujarMapa(0);     // el argumento '0'representa el nivel que se va a dibujar
         dibujarJugador(0);
@@ -389,10 +392,10 @@ void menu()
     play_midi(intro,1);
 
     blit(idle,buffer,0,0,0,0,960,540);
-
+https://www.youtube.com/watch?v=kV5Uq8w9-6Y
     while(true){
 
-    if (mouse_x>140&&mouse_x<340&&mouse_y>282&&mouse_y<311)
+    if(mouse_x>140&&mouse_x<340&&mouse_y>282&&mouse_y<311)
     {
       blit(aventura,buffer,0,0,0,0,960,540);
       if (mouse_b & 1)
@@ -403,18 +406,17 @@ void menu()
     }
     else if (mouse_x>236&&mouse_x<490&&mouse_y>373&&mouse_y<408)
     {
-        play_sample(soundselect,250,150,1000,0);
       blit(multiplayer,buffer,0,0,0,0,960,540);
     }
     else if (mouse_x>277&&mouse_x<512&&mouse_y>460&&mouse_y<521)
     {
-        play_sample(soundselect,250,150,1000,0);
       blit(creditos,buffer,0,0,0,0,960,540);
       if (mouse_b & 1)
       {
           int i=0;
           while(!key[KEY_ESC])
           {
+
                 if(i>300){
                     blit(creditos1,buffer,0,0,0,0,566,319);
                 }
@@ -435,7 +437,6 @@ void menu()
     }
     else if (mouse_x>520&&mouse_x<693&&mouse_y>463&&mouse_y<521)
     {
-        play_sample(soundselect,250,150,1000,0);
       blit(salir,buffer,0,0,0,0,960,540);
       if (mouse_b & 1)
       {
@@ -444,8 +445,8 @@ void menu()
     }
     else
     {
-      play_sample(soundselect,250,150,1000,0);
-      blit(idle,buffer,0,0,0,0,960,540);
+        play_sample(soundselect,250,150,1000,0);
+        blit(idle,buffer,0,0,0,0,960,540);
     }
     masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,50,75);
     blit(buffer, screen, 0, 0, 0, 0, 960, 540);
@@ -460,7 +461,7 @@ void iniciar()
     install_keyboard();
     install_mouse();
     set_color_depth(32);
-    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 960, 540, 0, 0);
+    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 960, 570, 0, 0);
         if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
        allegro_message("Error: inicializando sistema de sonido\n%s\n", allegro_error);
     }
