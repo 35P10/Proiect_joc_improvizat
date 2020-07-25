@@ -1,415 +1,487 @@
 #include <allegro.h>
-#define MFIL 19  // filas del mapa
-#define MCOL 36  // columnas del mapa, en realidad seran -1 descontando el caracter final '\0'. algunas medidas posibles: 24, 28, 36
-#define UNIT 37  // tamanio de cada unidad en el mapa
-#define P_ALTO 70	// Altura del pj
-#define P_ANCHO 35	// Ancho del pj
-int BUFFER_ALTO = MFIL*UNIT;  // Alto en pixeles de la pantalla
-int BUFFER_ANCHO = ((MCOL-1)*UNIT)+1;  // Ancho en pixeles de la pantalla
+#define MFIL 20  // filas del mapa
+#define MCOL 33  // columnas del mapa, en realidad seran 20(o sea -1) descontando el caracter final '\0' (//solo puede ser impar?)
+#include "Punto.h"
+#include "Mapa.h"
+#include "Bomba.h"
 
+#include "Key.h"
+#include "PowerUp.h"
+#include "Door.h"
+
+//#include "Jugador.h"
+
+#include <ctime>
 #include <iostream>
 using namespace std;
 
-// == CLASE MAPA =================================================================================================================
-class Mapa
-{
-    char**ptrMapa;
-    friend class Juego;
-public:
-    Mapa();
-    Mapa(char[][MCOL]);
-    char**getPtrMapa();
-    void crearMatriz();
-    void insertarMapa(char[][MCOL]); // recibe un mapa como una matriz estatica([][]) y lo asigna a ptrMapa como una matriz dinamica(**)
-    void imprimirMapa();
-};
 
-Mapa::Mapa() {
-    ptrMapa = nullptr;
-}
-Mapa::Mapa(char mapaEstatico[][MCOL]) {
-    crearMatriz();
-    insertarMapa(mapaEstatico);
-}
-char** Mapa::getPtrMapa() {
-    return ptrMapa;
-}
-void Mapa::crearMatriz() {
-    ptrMapa = new char*[MFIL];
-    for(int i = 0; i < MFIL; i++)
-        ptrMapa[i] = new char[MCOL];
-}
-void Mapa::insertarMapa(char mapaEstatico[][MCOL]) {
-    for(int i = 0; i < MFIL; i++)
-        for(int j = 0; j < MCOL; j++)
-            ptrMapa[i][j] = mapaEstatico[i][j];
-}
-void Mapa::imprimirMapa() {
-    for(int i = 0; i < MFIL; i++) {
-        for(int j = 0; j < MCOL; j++)
-            cout << ptrMapa[i][j];
-        cout << endl;
+// == BOMBA ==============================================================
+
+void collisionBomba(int X,int Y,int nivel, Mapa *arrayMapas,Jugador *arrayJugadores, int cantJugadores, int alcanze) //en juego
+{
+    int y=Y/45;
+    int x=X/45;
+    //int alcanze=2;
+
+    int abajo = 1;
+    int derecha = 1;
+    int arriba = 1;
+    int izquierda = 1;
+
+    for(int j=0 ; j<cantJugadores ; j++)
+            {
+                if (arrayJugadores[j].getCoordenada()->getX()== x*45 && arrayJugadores[j].getCoordenada()->getY()==(y)*45)
+                    arrayJugadores[j].addSalud(-1);
+            }
+
+    for(int i=1; i<=alcanze ;i++)
+    {
+        if (abajo==1){//colision abajo
+        if(arrayMapas[nivel].getPtrMapa()[y+i][x] != 'x'){ //colision con el mapa
+            arrayMapas[nivel].getPtrMapa()[y+i][x] = 'k';
+
+            for(int j=0 ; j<cantJugadores ; j++)
+            {
+                if (arrayJugadores[j].getCoordenada()->getX()== x*45 && arrayJugadores[j].getCoordenada()->getY()==(y+i)*45)
+                    arrayJugadores[j].addSalud(-1);
+            }
+
+            //cout<<"colision abajo: "<<y+i<<endl;
+            //cout<<"x: "<<y+i<<endl;
+            //cout<<"y: "<<x<<endl;
+            }
+        else
+            abajo=0;
+        }
+
+        if (derecha==1){//colision derecha
+        if(arrayMapas[nivel].getPtrMapa()[y][x+i] != 'x'){
+            arrayMapas[nivel].getPtrMapa()[y][x+i] = 'k';
+
+
+            for(int j=0 ; j<cantJugadores ; j++)
+            {
+                if (arrayJugadores[j].getCoordenada()->getX()==(x+i)*45 && arrayJugadores[j].getCoordenada()->getY()==y*45)
+                    arrayJugadores[j].addSalud(-1);
+            }
+
+
+            //cout<<"colision derecha: "<<y+i<<endl;
+            //cout<<"x: "<<y<<endl;
+            //cout<<"y: "<<x+i<<endl;
+            }
+        else
+            derecha=0;
+        }
+
+        if (arriba==1){//colision arriba
+        if(arrayMapas[nivel].getPtrMapa()[y-i][x] != 'x'){
+            arrayMapas[nivel].getPtrMapa()[y-i][x] = 'k';
+
+            for(int j=0 ; j<cantJugadores ; j++)
+            {
+                if (arrayJugadores[j].getCoordenada()->getX()==x*45 && arrayJugadores[j].getCoordenada()->getY()==(y-i)*45)
+                    arrayJugadores[j].addSalud(-1);
+            }
+
+            //cout<<"colision abajo: "<<y+i<<endl;
+            //cout<<"x: "<<y+i<<endl;
+            //cout<<"y: "<<x<<endl;
+            }
+        else
+            arriba=0;
+        }
+
+        if (izquierda==1){//colision izquierda
+        if(arrayMapas[nivel].getPtrMapa()[y][x-i] != 'x'){
+            arrayMapas[nivel].getPtrMapa()[y][x-i] = 'k';
+
+            for(int j=0 ; j<cantJugadores ; j++)
+            {
+                if (arrayJugadores[j].getCoordenada()->getX()==(x-i)*45 && arrayJugadores[j].getCoordenada()->getY()==y*45)
+                    arrayJugadores[j].addSalud(-1);
+            }
+
+            //cout<<"colision derecha: "<<y+i<<endl;
+            //cout<<"x: "<<y<<endl;
+            //cout<<"y: "<<x+i<<endl;
+            }
+        else
+            izquierda=0;
+        }
+
+
     }
 }
 
-// == CLASE PERSONAJE (Padre) =====================================================
-
-class Personaje
-{
-
-};
-
-// == CLASE BOMBA ==============================================================
-
-class Bomba
-{
-    int potencia;
-    float tiempo;
-};
-
-// == CLASE PUNTO ==============================================================
-class Punto
-{
-    int x, y;
-    friend class Juego;
-public:
-    Punto();
-    Punto(int, int);
-    Punto(Punto &);
-    void offset(int, int);
-    void imprimirPunto();
-};
-
-Punto::Punto() {
-    x = 0; y = 0;
-}
-Punto::Punto(int x, int y) {
-    this->x = x; this->y = y;
-}
-Punto::Punto(Punto &oPunto) {
-    x = oPunto.x; y = oPunto.y;
-}
-void Punto::offset(int offsetX, int offsetY)
-{
-    x += offsetX; y += offsetY;
-}
-void Punto::imprimirPunto() {
-    cout << "x = " << x << ", y = " << y << endl;
-}
-
-// == CLASE JUGADOR ==============================================================
-class Jugador
-{
-    Punto *coordenada;
-    int direccion;
-    int salud;
-    int velocidad;
-    int cantBombas;
-    bool enMovimiento;
-    void init();
-    friend class Juego;
-public:
-    Jugador();
-    Jugador(Punto);
-    void plantarBomba();
-    void imprimirDatos();
-};
-
-void Jugador::init() {
-	direccion  = 3;
-    salud      = 10;
-    velocidad  = 3;
-    cantBombas = 1;
-    enMovimiento = false;
-    coordenada = new Punto(0,0);
-}
-Jugador::Jugador() {
-    init();
-}
-Jugador::Jugador(Punto coord) {
-    init();
-    *coordenada = coord;				// usa ctor. copia de Punto
-}
-void Jugador::plantarBomba() {
-
-}
-void Jugador::imprimirDatos() {
-    coordenada->imprimirPunto();
-    cout << salud << endl;
-    cout << velocidad << endl;
-    cout << cantBombas << endl;
-    cout << direccion << endl;
-}
-
-// == CLASE ENEMIGO ==============================================================
-class Enemigo
-{
-
-};
 
 // == CLASE JUEGO =================================================================
+
 class Juego
 {
-    BITMAP *buffer_juego;   // buffer: se asigna su valor en el main, buffer es el espacio donde se insertan los sprites(imagenes)
+    BITMAP *buffer;         // buffer: se asigna su valor en el main, buffer es el espacio donde se insertan los sprites(imagenes)
     BITMAP *muro;           // muro: tambien se asigna en el main, es la variable que va a contener la imagen con q se hacen los muros
     BITMAP *player;         // player: buffer de personaje
     BITMAP *player_bmp;     // player_bmp: imagen bmp del personaje
-    BITMAP *bomba;
     BITMAP *bomba_bmp;
-    int cantMapas;   		// cantidad de niveles
+    BITMAP *muro_destructible;
+
+    int unit = 45;          // tamaño de cada unidad de imagen en el mapa  (en pixeles)
+    int cantMapas;   // cantidad de niveles
     Mapa *arrayMapas;       // array con punteros a cada objeto Mapa (niveles)
     int cantJugadores;
     Jugador *arrayJugadores;
-    int contReloj;
+    int dir = 0;
+
+    Bomba bombas[5];
+    int max_bombas = 5;
+
+    PowerUp PowerUps[3];
+    int max_powerUps = 3;
+    int tiempo_powerUp = 300;
+
+
 public:
     Juego();
+    ~Juego();
     Mapa* getArrayMapas();
     Jugador* getArrayJugadores();
-    void moverJugador(int, int, int);	// (pj, movimiento en x, movimiento en y)
+
+
     void crearArrayMapas();
     void crearArrayJugadores();
     void dibujarMapa(int);
     void dibujarJugador(int);
     void mostrarPantalla();
-	bool hayColision(int, int);
-    void ejecutar(int);					// # del mapa
+    bool colision();
+    void ejecutar();
+    void ejecucionPowerUps();
+    void nextLevel(int &n_mapa,Key &theKey, Door &theDoor);
+    void powerUpGenerator (int &n_powerUp, int nivel, int &t_generacionDePowerUp);
+    void explosionDeBomba(int tiempo,int n_mapa,int alcanze);
     int pause();
-    void menu();
+    void checkSaludPlayers(int &status);
+
 };
+
+
 
 Juego::Juego()
 {
-    buffer_juego = create_bitmap((MCOL-1)*UNIT, MFIL*UNIT); // *UNIT ->es el tam de la imagen (45px x 45px)
-    muro       = load_bitmap("muro_37x37.bmp", NULL);
-    player     = create_bitmap(P_ANCHO, P_ALTO);  // ver si necesita mas pixeles
-    player_bmp = load_bitmap("pj1_tileset_70x35_2.bmp", NULL);
-    bomba      = create_bitmap(UNIT,UNIT);
+    buffer     = create_bitmap((MCOL-1)*45, MFIL*45); // *30 ->es el tam de la imagen (30px x 30px)
+    muro       = load_bitmap("muro.bmp", NULL);
+    player     = create_bitmap(45, 90);  // ver si necesita mas pixeles
+    player_bmp = load_bitmap("player.bmp", NULL);
+    muro_destructible  = load_bitmap("muro_destructuble.bmp", NULL);
     bomba_bmp  = load_bitmap("bomba.bmp", NULL);
-    contReloj  = 0;
 
-    cantMapas  = 1; // serán más
+    cantMapas  = 3; // serán más
     arrayMapas = new Mapa[cantMapas];
     crearArrayMapas();
-
     cantJugadores  = 2; //
     arrayJugadores = new Jugador[cantJugadores];
     crearArrayJugadores();
 }
+
+Juego::~Juego()
+{
+
+   delete []buffer;         // buffer: se asigna su valor en el main, buffer es el espacio donde se insertan los sprites(imagenes)
+    delete []muro;           // muro: tambien se asigna en el main, es la variable que va a contener la imagen con q se hacen los muros
+    delete []player;         // player: buffer de personaje
+    delete []player_bmp;     // player_bmp: imagen bmp del personaje
+    delete []bomba_bmp;
+    delete []muro_destructible;
+    delete []arrayMapas;
+    delete []arrayJugadores;
+}
+
+
+
 Mapa* Juego::getArrayMapas() {
     return arrayMapas;
 }
 Jugador* Juego::getArrayJugadores() {
     return arrayJugadores;
 }
-void Juego::moverJugador(int pj, int movX, int movY){	// recibe parametro del jugador y direccion de movimiento
-	cout<<"Esta moviendo"<<endl;
-	arrayJugadores[0].enMovimiento = true;
-	arrayJugadores[pj].coordenada->offset(arrayJugadores[pj].velocidad*movX, arrayJugadores[pj].velocidad*movY);
-}
 void Juego::crearArrayMapas()
 {
     char mapa_00[MFIL][MCOL] = { // NIVEL 0
-
-	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-   	"x         x                       x",
-   	"x   xxx   x x x                   x",
-   	"x   x x   x                       x",
-   	"x   xxx   x x x                   x",
-   	"x         x                       x",
-   	"xxxx   xxxxxxxxxxxxxxxxxx         x",
-   	"x                                 x",
-   	"x  x x x xxxx  xx xx              x",
-   	"x              xx xx              x",
-   	"x  x x x xxxx                     x",
-   	"x                                 x",
-   	"x                                 x",
-   	"x                                 x",
-   	"x                                 x",
-   	"x                                 x",
-   	"x                                 x",
-   	"x                                 x",
-   	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-   	};
-   	                              // "mapa_00" es el diseño del mapa hecho con chars
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", //alto =17, ancho=20
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",//xyyyyyyxyyyyyyyxyyyxyxyyyxyyyxyx
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    };                              // "mapa_00" es el diseño del mapa hecho con chars
     Mapa oMapa_00(mapa_00);         // se crea "oMapa_00" que es un objeto de la clase Mapa, basado en el diseño de "mapa_00"
     arrayMapas[0] = oMapa_00;       // se inserta el objeto "oMapa_00" en la primera posicion del array de mapas del juego
-/*
+
     char mapa_01[MFIL][MCOL] = { // NIVEL 1
-    "xxxxxxxxxxxxxxxxxxxx",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "x                  x",
-    "xxxxxxxxxxxxxxxxxxxx"
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", //alto =17, ancho=20
+    "xkkyyyyyyyyyyxyyyxyyyxyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxyxyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxyxyyyyyyyyyx",
+    "xyxyxxyxyxxxyxyxyxyxyyyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxxxyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxxxyxyxyxyxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxxxyxyxyxyxxxxxxxxxxxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxyxxyxyxyxyxyxyxyxyxxxxxxxxxxx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxxxyxyxyxyxxxxxxxxxxxyx",
+    "xyyyyyyxyyyyyxyxyxyxyyyyyyyyyyyx",
+    "xyxxyxyxyxyxyxyxyxyxyxxxxxxxxxxx",
+    "xyyyyyyxyyyyyxyxyxyxyyyxyyyxyyyx",
+    "xkxyxxyxyxxxyxyxyxyxyxyxyxyxyxyx",//
+    "xkkyyyyxyyyyyyyxyyyxyxyyyxyyyxyx",//xyyyyyyxyyyyyyyxyyyxyxyyyxyyyxyx
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     };
     Mapa oMapa_01(mapa_01);
     arrayMapas[1] = oMapa_01;
-    */
+
+    char mapa_02[MFIL][MCOL] = { // NIVEL 2
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", //alto =17, ancho=20
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkyyyyyyykkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkykkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",
+    "xkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkx",//xyyyyyyxyyyyyyyxyyyxyxyyyxyyyxyx
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    };
+    Mapa oMapa_02(mapa_02);
+    arrayMapas[2] = oMapa_02;
 }
 
 void Juego::crearArrayJugadores()
 {
-        Punto oPunto1(UNIT, UNIT);
+        Punto oPunto1(45,45);
         Jugador oPlayer1(oPunto1);      //aqui llenar más jugadores
         arrayJugadores[0] = oPlayer1;
-/*
-        Punto oPunto2((MCOL-3)*30,(MFIL-2)*30);
+
+        Punto oPunto2((MCOL-3)*45,(MFIL-3)*45);
         Jugador oPlayer2(oPunto2);
         arrayJugadores[1] = oPlayer2;
-*/
 }
 
-bool Juego::hayColision(int pj, int mapa)
-{
-    int dir = arrayJugadores[pj].direccion;
-    int vel = arrayJugadores[pj].velocidad;
-    int posX_pj = arrayJugadores[pj].coordenada->x;
-    int posY_pj = arrayJugadores[pj].coordenada->y;
 
-    // rango de colision del pj
-    int posX_izq = posX_pj+10; //12
-    int posX_der = posX_pj+P_ANCHO-10; //12
-    int posY_sup = posY_pj+P_ANCHO+20; // 24
-    int posY_inf = posY_pj+(2*P_ANCHO);
-
-    //aqui se simula el siguiente paso del pj para verificar si habria colision
-    switch(dir){
-    	case 0: 										//si se moviera hacia la izquierda
-    		posX_izq-=vel; 								// vel (velocidad): representa un unidad de movimiento del pj / dar un paso
-    		for(int i=posY_sup; i<=posY_inf; i++){		//va a recorrer todo el borde izquiero del boxcolider buscando colision
-    			if(arrayMapas[mapa].ptrMapa[i/UNIT][posX_izq/UNIT]=='x')
-    				return true;
-			}
-			return false;
-		case 1:											//si se moviera hacia la derecha
-			posX_der+=vel;
-    		for(int i=posY_sup; i<=posY_inf; i++){
-    			if(arrayMapas[mapa].ptrMapa[i/UNIT][posX_der/UNIT]=='x')
-    				return true;
-			}
-			return false;
-		case 2:											//si se moviera hacia la derecha
-			posY_sup-=vel;
-    		for(int i=posX_izq; i<=posX_der; i++){
-    			if(arrayMapas[mapa].ptrMapa[posY_sup/UNIT][i/UNIT]=='x')
-    				return true;
-			}
-			return false;
-		case 3:											//si se moviera hacia la derecha
-			posY_inf+=vel;
-    		for(int i=posX_izq; i<=posX_der; i++){
-    			if(arrayMapas[mapa].ptrMapa[posY_inf/UNIT][i/UNIT]=='x')
-    				return true;
-			}
-			return false;
-	}
-}
-
-void Juego::ejecutar(int mapa) // inicia la ejecucion del juego
-{
-    int status=0;
-    while(status!=1)
+void Juego::explosionDeBomba(int tiempo,int n_mapa, int alcanze) //si la bomba es iniciada, su contador sube, y al llegar al tiempo determinado
+{                                                                               //la bomba explota (colision bomba)
+     for (int i=0;i<max_bombas;i++)
     {
-        if (key[KEY_LEFT] ) {
-            arrayJugadores[0].direccion=0;
-            if(hayColision(0, mapa)==false) {
-            	moverJugador(0, -1, 0);
-            }
-
+        if(bombas[i].contador!=0){
+        bombas[i].contador++;
+        if (bombas[i].contador==tiempo){
+            collisionBomba(bombas[i].x,bombas[i].y,n_mapa,arrayMapas,arrayJugadores,cantJugadores,alcanze);
+            bombas[i].x=0;
+            bombas[i].y=0;
+            bombas[i].contador=0;
         }
-        else if (key[KEY_RIGHT]){
-            arrayJugadores[0].direccion=1;
-            if(hayColision(0, mapa)==false) {
-            	moverJugador(0, 1, 0);
-            }
         }
-        else if (key[KEY_UP]) {
-            arrayJugadores[0].direccion=2;
-            if(hayColision(0, mapa)==false) {
-            	moverJugador(0, 0, -1);
-            }
-        }
-        else if (key[KEY_DOWN]) {
-            arrayJugadores[0].direccion=3;
-            if(hayColision(0, mapa)==false) {
-            	moverJugador(0, 0, 1);
-            }
-        }
-        else if (key[KEY_E]) {
-            arrayJugadores[0].plantarBomba();
-
-        }
-        else if (key[KEY_ESC]) {
-            status = pause();
-        }
-        arrayJugadores[0].coordenada->imprimirPunto();
-        clear(buffer_juego);
-        dibujarMapa(0);     // el argumento '0'representa el nivel que se va a dibujar
-        dibujarJugador(0);
-        //dibujarJugador(1);
-        mostrarPantalla();
-
-        rest(10);           // tiempo de espera en milisegundos para cada refresh
-        contReloj++;
-        if (contReloj > 40)
-            contReloj = 0;
-        cout << "reloj = " << contReloj<< endl;
-
     }
 }
+
+
+void Juego:: powerUpGenerator (int &n_powerUp, int nivel, int &t_generacionDePowerUp)
+{
+    t_generacionDePowerUp--;
+    //cout<<t_generacionDePowerUp<<endl;
+    //cout<<"n_powerUp: "<<n_powerUp<<endl;
+    if (t_generacionDePowerUp<=0)
+    {
+        //cout<<"tiempo De Generacion en 0"<<endl;
+        int x;
+        int y;
+        if (PowerUps[n_powerUp].contador==0){
+            srand((unsigned) time(0));
+            x=(rand() % 30) + 1;
+            y = (rand() % 17) + 1;
+            if(arrayMapas[nivel].getPtrMapa()[y][x] != 'x')
+            {
+                PowerUps[n_powerUp].x=x*45;
+                PowerUps[n_powerUp].y=y*45;
+                PowerUps[n_powerUp].contador=1;
+                if((n_powerUp+1) == max_powerUps)
+                {
+                n_powerUp=0;
+                }
+                else{
+                n_powerUp++;}
+                t_generacionDePowerUp=(rand() % 100) + 1;
+            }
+
+
+        }
+    }
+}
+
+
+void Juego::ejecucionPowerUps()
+{
+    for(int i=0;i<=max_powerUps;i++){
+        PowerUps[i].checkStatus(arrayJugadores,cantJugadores,tiempo_powerUp,max_bombas);
+    }
+}
+
+void Juego::checkSaludPlayers(int &status)
+{
+    for (int i=0 ; i<cantJugadores ; i++)
+        if (arrayJugadores[i].checkStatus()==1)
+            status = 1;
+}
+
+void Juego::nextLevel(int &n_mapa, Key &theKey,  Door &theDoor)
+{
+
+
+    crearArrayJugadores();
+
+    Bomba newBombas[max_bombas];
+    for (int i =0 ; i<max_bombas ; i++)
+        bombas[i] = newBombas[i];
+    cout<<"powerup"<<endl;
+    PowerUp newPowerUps[max_powerUps];
+    for (int i =0 ; i<max_powerUps ; i++)
+        PowerUps[i] = newPowerUps[i];
+    cout<<"mapa"<<endl;
+    if (n_mapa+1 > cantMapas-1)
+        n_mapa=0;
+    else
+        n_mapa++;
+    cout<<"key"<<endl;
+    theKey.setKey(n_mapa, arrayMapas);
+    cout<<"door"<<endl;
+    theDoor.setStatus(0);
+
+}
+
+
+void Juego::ejecutar() // inicia la ejecucion del juego
+{
+
+    //int max_bombas=5;
+    int n_bomba=0;
+
+    //int max_powerUps=3;
+    int n_powerUp=0;
+    int t_generacionDePowerUp = 100;
+
+    int n_mapa = 0;
+
+    Key theKey(n_mapa,arrayMapas);
+
+    Door theDoor(360,360);
+
+    int status=0;
+
+
+    while(status!=1)
+    {
+        arrayJugadores[0].movimiento(n_mapa,arrayMapas,bombas,max_bombas,n_bomba);
+
+
+        if (key[KEY_ESC]) {
+            status = pause();
+            cout<<"status: "<<status<<endl;
+            if (status==1)
+                break;
+        }
+
+
+        if (theDoor.checkStatus(arrayJugadores,cantJugadores)==1) {
+            nextLevel(n_mapa,theKey,theDoor);
+            cout<<"NextMAP"<<endl;
+        }
+
+
+
+        checkSaludPlayers(status);
+        powerUpGenerator(n_powerUp,n_mapa,t_generacionDePowerUp);
+        //contadorPowerUp(PowerUps,max_powerUps,300);
+        ejecucionPowerUps();
+        explosionDeBomba(30,n_mapa,arrayJugadores[0].getAlcanzeDeBomba()); //el stack de cada jugador (fila del array)
+
+        clear(buffer);
+
+        dibujarMapa(n_mapa);     // el argumento '0'representa el nivel que se va a dibujar
+
+        theKey.checkStatus(arrayJugadores,cantJugadores);
+        dibujarJugador(0);
+        dibujarJugador(1);
+        printBomba(bomba_bmp,buffer,bombas,n_bomba-1,max_bombas);
+        printPowerUp(bomba_bmp,buffer,PowerUps, max_powerUps);
+        theKey.printKey(buffer);
+        theDoor.printDoor(buffer);
+        mostrarPantalla();
+        rest(20);           // tiempo de espera en milisegundos para cada refresh
+    }
+}
+
+
 
 //x, y ->coordenadas en la matriz del mapa
 //buffer-> area donde se va a dibujar(insertar sprites)
 //muro->variable que representa la imagen png que se va a insertar para los muros
 //x*10, y*10-> pq la imagen del muro es de 10px x 10px
+
+
+
+
 void Juego::dibujarMapa(int nivel)
 {
     int x, y;
-    for(x = 0; x < MFIL; x++) {                             // itera por las filas del mapa seleccionado
-        for(y = 0; y < MCOL; y++) {                         // itera por cada elemento de la fila del mapa seleccionado
+    for(x = 0; x < MFIL; x++) {                              // itera por las filas del mapa seleccionado
+        for(y = 0; y < MCOL; y++) {                           // itera por cada elemento de la fila del mapa seleccionado
             if(arrayMapas[nivel].getPtrMapa()[x][y] == 'x') // si encuentra una 'x' va a dibujar un muro encima
-                draw_sprite(buffer_juego, muro, y*UNIT, x*UNIT);
+                draw_sprite(buffer, muro, y*45, x*45);
+            if(arrayMapas[nivel].getPtrMapa()[x][y] == 'y')
+                draw_sprite(buffer, muro_destructible, y*45, x*45);
         }
     }
 }
+
 void Juego::dibujarJugador(int pj)
 {
-	int dir = arrayJugadores[pj].direccion;
-	int posX = arrayJugadores[pj].coordenada->x;
-	int posY = arrayJugadores[pj].coordenada->y;
-    bool enMovimiento = arrayJugadores[pj].enMovimiento;
-
-    if (enMovimiento) {
-        int spritePj = contReloj/10;
-        blit(player_bmp, player, spritePj*P_ANCHO, dir*P_ALTO, 0, 0, P_ANCHO, P_ALTO);
-        arrayJugadores[pj].enMovimiento = false;
-    }
-    else
-        blit(player_bmp, player, 0, dir*P_ALTO, 0, 0, P_ANCHO, P_ALTO);
-
-    draw_sprite(buffer_juego, player, posX, posY);
+    blit(player_bmp, player, dir*45, 0, 0, 0, 45, 90);
+    draw_sprite(buffer, player, arrayJugadores[pj].getCoordenada()->getX(), arrayJugadores[pj].getCoordenada()->getY()-45);
 }
 void Juego::mostrarPantalla()
 {
-    blit(buffer_juego, screen, 0, 0, 0, 0, (MCOL-1)*UNIT, MFIL*UNIT);
+    blit(buffer, screen, 0, 0, 0, 0, (MCOL-1)*45, MFIL*45);
 }
 ////pause///
 
 int Juego::pause()
 {
     install_mouse();
-    BITMAP *buffer_pause = create_bitmap(566,319);
+    BITMAP *buffer = create_bitmap(566,319);
     BITMAP *idle = load_bitmap("recursos/pause_idle.bmp",NULL);
     BITMAP *continuar= load_bitmap("recursos/pause_continuar.bmp",NULL);
     BITMAP *salir = load_bitmap("recursos/pause_salir.bmp",NULL);
@@ -417,32 +489,34 @@ int Juego::pause()
 
     while(!key[KEY_ESC]){
         if(mouse_x>42&&mouse_x<275&&mouse_y>220&&mouse_y<284){
-            blit(continuar,buffer_pause,0,0,0,0,566,319);
+            blit(continuar,buffer,0,0,0,0,566,319);
             if (mouse_b & 1){
             return 0;
             }
         }
         else if(mouse_x>290&&mouse_x<520&&mouse_y>220&&mouse_y<284){
-            blit(salir,buffer_pause,0,0,0,0,566,319);
+            blit(salir,buffer,0,0,0,0,566,319);
             if (mouse_b & 1){
             return 1;
             }
         }
         else{
-            blit(idle,buffer_pause,0,0,0,0,566,319);
+            blit(idle,buffer,0,0,0,0,566,319);
+
         }
-        masked_blit(cursor,buffer_pause,0,0,mouse_x,mouse_y,50,75);
-        blit(buffer_pause, screen, 0,0, 180, 130, 566, 319);
+        masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,50,75);
+        blit(buffer, screen, 0,0, 180, 130, 566, 319);
     }
 
 }
 
 /////menu///
 
-void Juego::menu()
+void menu()
 {
     //iniciar();
-    BITMAP *buffer_menu = create_bitmap(BUFFER_ANCHO, BUFFER_ALTO);
+    install_mouse();
+    BITMAP *buffer = create_bitmap(960,550);
     BITMAP *idle = load_bitmap("recursos/idLe.bmp",NULL);
     BITMAP *aventura = load_bitmap("recursos/aventura.bmp",NULL);
     BITMAP *multiplayer = load_bitmap("recursos/multiplayer.bmp",NULL);
@@ -460,85 +534,93 @@ void Juego::menu()
     SAMPLE *soundselect = load_wav("recursos/sound_select.wav");
     play_midi(intro,1);
 
-    blit(idle,buffer_menu,0,0,0,0,960,540);
+    blit(idle,buffer,0,0,0,0,960,550);
 
     while(true){
-	    if (mouse_x>140&&mouse_x<340&&mouse_y>282&&mouse_y<311)
-	    {
-	    	play_sample(soundselect,250,150,1000,0);
-	      	blit(aventura,buffer_menu,0,0,0,0,960,540);
-	      	if (mouse_b & 1)
-	      	{
-	        	ejecutar(0);
-	        	break;
-	      	}
-	    }
-	    else if (mouse_x>236&&mouse_x<490&&mouse_y>373&&mouse_y<408)
-	    {
-	      	blit(multiplayer,buffer_menu,0,0,0,0,960,540);
-	    }
-	    else if (mouse_x>277&&mouse_x<512&&mouse_y>460&&mouse_y<521)
-	    {
-	      	blit(creditos,buffer_menu,0,0,0,0,960,540);
-	      	if (mouse_b & 1)
-	      	{
-	          	int i=0;
-	          	while(!key[KEY_ESC])
-	          	{
-	                if(i>300)
-	                    blit(creditos1,buffer_menu,0,0,0,0,566,319);
-	                else if(i>200)
-	                    blit(creditos2,buffer_menu,0,0,0,0,566,319);
-	                else
-	                    blit(creditos3,buffer_menu,0,0,0,0,566,319);
-	                i++;
 
-	                if(i==400){i=0;}
-
-	                blit(buffer_menu, screen, 0,0, 180, 130, 566, 319);
-	            }
-	      	}
-	    }
-	    else if (mouse_x>520&&mouse_x<693&&mouse_y>463&&mouse_y<521)
-	    {
-	      	blit(salir,buffer_menu,0,0,0,0,960,540);
-	      	if (mouse_b & 1)
-	        	break;
-	    }
-	    else{
-	    	blit(idle,buffer_menu,0,0,0,0,960,540);
-		}
-	    masked_blit(cursor,buffer_menu,0,0,mouse_x,mouse_y,50,75);
-	    blit(buffer_menu, screen, 0, 0, 0, 0, 960, 540);
+    if(mouse_x>140&&mouse_x<340&&mouse_y>282&&mouse_y<311)
+    {
+      blit(aventura,buffer,0,0,0,0,960,570);
+      if (mouse_b & 1)
+      {
+        Juego *oJuego = new Juego;
+        oJuego->ejecutar();
+        delete oJuego;
+        cout<<"Salio del juego"<<endl;
+       // break;
+      }
     }
+    else if (mouse_x>236&&mouse_x<490&&mouse_y>373&&mouse_y<408)
+    {
+      blit(multiplayer,buffer,0,0,0,0,960,540);
+    }
+    else if (mouse_x>277&&mouse_x<512&&mouse_y>460&&mouse_y<521)
+    {
+      blit(creditos,buffer,0,0,0,0,960,540);
+      if (mouse_b & 1)
+      {
+          int i=0;
+          while(!key[KEY_ESC])
+          {
+
+                if(i>300){
+                    blit(creditos1,buffer,0,0,0,0,566,319);
+                }
+                else if(i>200){
+                    blit(creditos2,buffer,0,0,0,0,566,319);
+                }
+                else
+                {
+                    blit(creditos3,buffer,0,0,0,0,566,319);
+                }
+                i++;
+
+                if(i==400){i=0;}
+
+                blit(buffer, screen, 0,0, 180, 130, 566, 319);
+            }
+      }
+    }
+    else if (mouse_x>520&&mouse_x<693&&mouse_y>463&&mouse_y<521)
+    {
+      blit(salir,buffer,0,0,0,0,960,540);
+      if (mouse_b & 1)
+      {
+        break;
+      }
+    }
+    else
+    {
+        play_sample(soundselect,250,150,1000,0);
+        blit(idle,buffer,0,0,0,0,960,540);
+    }
+    masked_blit(cursor,buffer,0,0,mouse_x,mouse_y,50,75);
+    blit(buffer, screen, 0, 0, 0, 0, 960, 540);
+
+    }
+
 
 }
 
-inline void config_allegro()
+void iniciar()
 {
     allegro_init();
     install_keyboard();
     install_mouse();
     set_color_depth(32);
-    set_gfx_mode(GFX_AUTODETECT_WINDOWED, BUFFER_ANCHO, BUFFER_ALTO, 0, 0);
-    if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
-       	allegro_message("Error: inicializando sistema de sonido\n%s\n", allegro_error);
+    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1440, 855, 0, 0);
+        if (install_sound(DIGI_AUTODETECT, MIDI_AUTODETECT, NULL) != 0) {
+       allegro_message("Error: inicializando sistema de sonido\n%s\n", allegro_error);
     }
     set_volume(70, 70);
 }
 
-void iniciar_juego(){
-	config_allegro();
-	Juego oJuego;
-	oJuego.menu();
-	//oJuego.ejecutar(0);
-}
-
-// == MAIN ==============================================================
-
 int main ()
 {
-	iniciar_juego();
-	return 0;
+    //inicioAllegro();
+    iniciar();
+    menu();
+    //Juego oJuego;
+    //oJuego.ejecutar();
 }
 END_OF_MAIN ()

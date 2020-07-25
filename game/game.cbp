@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -32,11 +34,19 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/Bomba.h" />
+		<Unit filename="include/Door.h" />
+		<Unit filename="include/Jugador.h" />
+		<Unit filename="include/Key.h" />
+		<Unit filename="include/Mapa.h" />
+		<Unit filename="include/PowerUp.h" />
+		<Unit filename="include/Punto.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/Door.cpp" />
+		<Unit filename="src/Jugador.cpp" />
+		<Unit filename="src/PowerUp.cpp" />
+		<Unit filename="src/Punto.cpp" />
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>

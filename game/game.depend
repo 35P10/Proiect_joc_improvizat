@@ -7,7 +7,69 @@
 	<allegro.h>
 	<iostream>
 
-1593027985 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\main.cpp
+1593739925 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\main.cpp
 	<allegro.h>
+	"Punto.h"
+	"Bomba.h"
+	<iostream>
+
+1593710734 j:\documentos\2do\cc2\proiect_joc_improvizat\game\include\bomba.h
+	"Punto.h"
+	<iostream>
+
+1593318237 source:j:\documentos\2do\cc2\proiect_joc_improvizat\game\src\punto.cpp
+	<iostream>
+	"Punto.h"
+
+1593572755 j:\documentos\2do\cc2\proiect_joc_improvizat\game\include\punto.h
+
+1593318237 source:c:\users\lucca\desktop\game\src\punto.cpp
+	<iostream>
+	"Punto.h"
+
+1593572755 c:\users\lucca\desktop\game\include\punto.h
+
+1595589777 source:c:\users\lucca\desktop\game\main.cpp
+	<allegro.h>
+	"Punto.h"
+	"Mapa.h"
+	"Bomba.h"
+	"Key.h"
+	"PowerUp.h"
+	"Door.h"
+	<ctime>
+	<iostream>
+
+1593757758 c:\users\lucca\desktop\game\include\bomba.h
+	"Punto.h"
+	<iostream>
+
+1593574530 source:c:\users\lucca\desktop\game\src\mapa.cpp
+
+1594531318 source:c:\users\lucca\desktop\game\src\powerup.cpp
+
+1594841214 c:\users\lucca\desktop\game\include\powerup.h
+	<iostream>
+	<ctime>
+
+1594572962 source:c:\users\lucca\desktop\game\src\key.cpp
+
+1594573562 c:\users\lucca\desktop\game\include\mapa.h
+	"Punto.h"
+	<iostream>
+
+1594840339 c:\users\lucca\desktop\game\include\key.h
+	"Jugador.h"
+	<iostream>
+
+1594652618 source:c:\users\lucca\desktop\game\src\jugador.cpp
+
+1595277650 c:\users\lucca\desktop\game\include\jugador.h
+	"Punto.h"
+	<iostream>
+
+1594654614 source:c:\users\lucca\desktop\game\src\door.cpp
+
+1594702341 c:\users\lucca\desktop\game\include\door.h
 	<iostream>
 
