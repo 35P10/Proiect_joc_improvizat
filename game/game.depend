@@ -29,7 +29,7 @@
 
 1593572755 c:\users\lucca\desktop\game\include\punto.h
 
-1595589777 source:c:\users\lucca\desktop\game\main.cpp
+1597599721 source:c:\users\lucca\desktop\game\main.cpp
 	<allegro.h>
 	"Punto.h"
 	"Mapa.h"
@@ -40,7 +40,7 @@
 	<ctime>
 	<iostream>
 
-1593757758 c:\users\lucca\desktop\game\include\bomba.h
+1596424145 c:\users\lucca\desktop\game\include\bomba.h
 	"Punto.h"
 	<iostream>
 
@@ -48,7 +48,7 @@
 
 1594531318 source:c:\users\lucca\desktop\game\src\powerup.cpp
 
-1594841214 c:\users\lucca\desktop\game\include\powerup.h
+1596516582 c:\users\lucca\desktop\game\include\powerup.h
 	<iostream>
 	<ctime>
 
@@ -58,18 +58,124 @@
 	"Punto.h"
 	<iostream>
 
-1594840339 c:\users\lucca\desktop\game\include\key.h
+1597599838 c:\users\lucca\desktop\game\include\key.h
 	"Jugador.h"
 	<iostream>
 
 1594652618 source:c:\users\lucca\desktop\game\src\jugador.cpp
 
-1595277650 c:\users\lucca\desktop\game\include\jugador.h
+1596663825 c:\users\lucca\desktop\game\include\jugador.h
 	"Punto.h"
 	<iostream>
 
 1594654614 source:c:\users\lucca\desktop\game\src\door.cpp
 
-1594702341 c:\users\lucca\desktop\game\include\door.h
+1596520106 c:\users\lucca\desktop\game\include\door.h
+	<iostream>
+
+1594654614 source:c:\users\lucca\desktop\game - copia\src\door.cpp
+
+1594652618 source:c:\users\lucca\desktop\game - copia\src\jugador.cpp
+
+1594531318 source:c:\users\lucca\desktop\game - copia\src\powerup.cpp
+
+1593318237 source:c:\users\lucca\desktop\game - copia\src\punto.cpp
+	<iostream>
+	"Punto.h"
+
+1593572755 c:\users\lucca\desktop\game - copia\include\punto.h
+
+1596681504 source:c:\users\hp\pictures\photoscape x\game\main.cpp
+	<allegro.h>
+	"Punto.h"
+	"Mapa.h"
+	"Bomba.h"
+	"Key.h"
+	"PowerUp.h"
+	"Door.h"
+	<ctime>
+	<iostream>
+
+1593572755 c:\users\hp\pictures\photoscape x\game\include\punto.h
+
+1594573562 c:\users\hp\pictures\photoscape x\game\include\mapa.h
+	"Punto.h"
+	<iostream>
+
+1596424145 c:\users\hp\pictures\photoscape x\game\include\bomba.h
+	"Punto.h"
+	<iostream>
+
+1596667141 c:\users\hp\pictures\photoscape x\game\include\key.h
+	"Jugador.h"
+	<iostream>
+
+1596663825 c:\users\hp\pictures\photoscape x\game\include\jugador.h
+	"Punto.h"
+	<iostream>
+
+1596516582 c:\users\hp\pictures\photoscape x\game\include\powerup.h
+	<iostream>
+	<ctime>
+
+1596520106 c:\users\hp\pictures\photoscape x\game\include\door.h
+	<iostream>
+
+1594654614 source:c:\users\hp\pictures\photoscape x\game\src\door.cpp
+
+1594652618 source:c:\users\hp\pictures\photoscape x\game\src\jugador.cpp
+
+1594531318 source:c:\users\hp\pictures\photoscape x\game\src\powerup.cpp
+
+1593318237 source:c:\users\hp\pictures\photoscape x\game\src\punto.cpp
+	<iostream>
+	"Punto.h"
+
+1594654614 source:c:\users\dennis\downloads\game (1)\game\src\door.cpp
+
+1594652618 source:c:\users\dennis\downloads\game (1)\game\src\jugador.cpp
+
+1594531318 source:c:\users\dennis\downloads\game (1)\game\src\powerup.cpp
+
+1593318237 source:c:\users\dennis\downloads\game (1)\game\src\punto.cpp
+	<iostream>
+	"Punto.h"
+
+1593572755 c:\users\dennis\downloads\game (1)\game\include\punto.h
+
+1597700289 source:c:\users\dennis\downloads\game (1)\game\main.cpp
+	<allegro.h>
+	"Punto.h"
+	"Mapa.h"
+	"Bomba.h"
+	"Key.h"
+	"PowerUp.h"
+	"Door.h"
+	<ctime>
+	<iostream>
+	<thread>
+	<mutex>
+
+1597686622 c:\users\dennis\downloads\game (1)\game\include\mapa.h
+	"Punto.h"
+	<iostream>
+
+1597700246 c:\users\dennis\downloads\game (1)\game\include\bomba.h
+	"Punto.h"
+	<iostream>
+
+1597599838 c:\users\dennis\downloads\game (1)\game\include\key.h
+	"Jugador.h"
+	<iostream>
+
+1597689631 c:\users\dennis\downloads\game (1)\game\include\jugador.h
+	"Punto.h"
+	<iostream>
+
+1597599921 c:\users\dennis\downloads\game (1)\game\include\powerup.h
+	<iostream>
+	<ctime>
+
+1596520106 c:\users\dennis\downloads\game (1)\game\include\door.h
 	<iostream>
 

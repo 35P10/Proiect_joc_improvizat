@@ -37,12 +37,17 @@ class Door
         return 0;
     }
 
-    void printDoor(BITMAP *buffer)
+    void printDoor(BITMAP *buffer,Jugador *arrayJugadores)
     {
         BITMAP *door = load_bitmap("recursos/door.bmp", NULL);
-
+        BITMAP *door2 = load_bitmap("recursos/door2.bmp", NULL);
         if(status==0)
-            masked_blit(door,buffer,0, 0,  x, y, 45, 45);
+        {
+            if(arrayJugadores[0].getKey()==0)
+                masked_blit(door,buffer,0, 0,  x, y, 45, 45);
+            else
+                masked_blit(door2,buffer,0, 0,  x, y, 45, 45);
+        }
 
 
     }

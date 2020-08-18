@@ -1,6 +1,5 @@
 #include "Punto.h"
 
-
 #include <iostream>
 using namespace std;
 
@@ -11,6 +10,7 @@ public:
     char**ptrMapa;
     Mapa();
     Mapa(char[][MCOL]);
+    char** getPtrMapa(char[][MCOL]);
     char** getPtrMapa();
     void crearMatriz();
     void insertarMapa(char[][MCOL]); // recibe un mapa como una matriz estatica([][]) y lo asigna a ptrMapa como una matriz dinamica(**)
@@ -20,9 +20,19 @@ public:
 Mapa::Mapa() {
     ptrMapa = nullptr;
 }
+/*
 Mapa::Mapa(char mapaEstatico[][MCOL]) {
     crearMatriz();
     insertarMapa(mapaEstatico);
+}*/
+char** Mapa::getPtrMapa(char mapaEstatico[][MCOL]) {
+
+    if (ptrMapa == nullptr)
+    {
+        crearMatriz();
+        insertarMapa(mapaEstatico);
+    }
+    return ptrMapa;
 }
 char** Mapa::getPtrMapa() {
     return ptrMapa;

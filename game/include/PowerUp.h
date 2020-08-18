@@ -18,7 +18,7 @@ class PowerUp
     }
 
     void checkStatus(Jugador *arrayJugadores, int cantJugadores,int tiempo_powerUp, int max_bombas)
-    {
+    { //cuanto tiempo esta el powerup en el mapa
         if(contador!=0){
             contador++;
             if(contador==tiempo_powerUp)
@@ -34,7 +34,7 @@ class PowerUp
                 if (arrayJugadores[i].getCoordenada()->getX()== x && arrayJugadores[i].getCoordenada()->getY()==y){
 
                     srand((unsigned) time(0));
-                    x=(rand() % 3) + 1;
+                    x=(rand() % 4) + 1;
 
                     if (x==1)
                     {
@@ -47,7 +47,7 @@ class PowerUp
                     }
                     else if (x==2)
                     {
-                        if (arrayJugadores[i].getSalud()<9)
+                        if (arrayJugadores[i].getSalud()<4)
                         {
                         cout<<"Salud +1";
                         arrayJugadores[i].addSalud(1);
@@ -60,6 +60,15 @@ class PowerUp
                         cout<<"nBombas +1";
                         arrayJugadores[i].addCantBombas(1);}
                     }
+                    else if (x==4)
+                    {
+                        if (arrayJugadores[i].getVelocidad()==3)
+                        {
+                        cout<<"velocidad aumentada";
+                        arrayJugadores[i].addVelocidad();}
+                    }
+
+
 
                     x=0;
                     y=0;
@@ -78,10 +87,10 @@ class PowerUp
 };
 
 
-void printPowerUp(BITMAP *bomba_bpm, BITMAP *buffer, PowerUp *PowerUps,int max_powerUps)
+void printPowerUp(BITMAP *buffer, PowerUp *PowerUps,int max_powerUps)
 {
     BITMAP *bomba_0 = load_bitmap("bomba0.bmp", NULL);
-
+    BITMAP *powerUp = load_bitmap("recursos/powerUp.bmp", NULL);
     for(int i=0;i<max_powerUps;i++){
         //cout<<"i:" <<i<<endl;
         //cout<<"x:" <<PowerUps[i].x<<endl;
@@ -89,7 +98,7 @@ void printPowerUp(BITMAP *bomba_bpm, BITMAP *buffer, PowerUp *PowerUps,int max_p
         if(PowerUps[i].contador==0)
         masked_blit(bomba_0,buffer,0, 0,  PowerUps[i].x, PowerUps[i].y, 45, 45);
         else
-        masked_blit(bomba_bpm,buffer,0, 0, PowerUps[i].x, PowerUps[i].y, 45, 45);
+        masked_blit(powerUp,buffer,0, 0, PowerUps[i].x, PowerUps[i].y, 45, 45);
     }
 }
 

@@ -27,7 +27,7 @@ class Key
         randomX=(rand() % 30) + 1;
         randomY = (rand() % 17) + 1;
         while(true){
-        if(arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 'x')
+        if(arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 'x' && arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 't' && arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 's')
         {
             x=randomX*45;
             y=randomY*45;
@@ -45,7 +45,7 @@ class Key
         randomX=(rand() % 30) + 1;
         randomY = (rand() % 17) + 1;
         while(true){
-        if(arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 'x')
+        if(arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 'x' && arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 't'&& arrayMapas[nivel].getPtrMapa()[randomY][randomX] != 's')
         {
             x=randomX*45;
             y=randomY*45;
